@@ -92,12 +92,12 @@ bool TableModel::setHeaderLabels(const QStringList headerLabels, Qt::Orientation
 {
     bool result = true;
 
-    insertColumns(0, headerLabels.size(), QModelIndex());
-
     for(int i=0; i < headerLabels.size(); i++)
     {
         result = result && setHeaderData(i, orientation, QObject::tr(headerLabels.at(i).toUtf8()), Qt::DisplayRole);
     }
+
+    insertColumns(0, headerLabels.size(), QModelIndex());
 
     return result;
 }

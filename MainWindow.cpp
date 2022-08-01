@@ -17,15 +17,16 @@ MainWindow::MainWindow(QWidget *parent)
 ///---------------------------------------------------- TABLE VIEW ---------------------------------------------------------
 
     QTableView* tableView = new QTableView(this);
-    tableView->setStyleSheet("QTableView QHeaderView { color: white;qproperty-highlightSections: false; }\
-                             QTableView QHeaderView::section {padding: 0 4px; background-color: #999;  border: 1px solid #777;}\
-                             QTableView QHeaderView::section:horizontal { height:28px;border-left:1px solid #AAA; border-top:none; }\
-                             QTableView QHeaderView::section:horizontal:last { border-right: none; }\
-                             QTableView QHeaderView::section:vertical { border-top: 1px solid #AAA; border-left:none; }\
-                             QTableView QHeaderView::section:vertical:last  { border-bottom: none; }\
-                             QScrollBar {background-color: #D8D8D8;border:none; } \
-                             QScrollBar::handle {border: 1px solid #999;border-bottom-color: #666;border-right-color:#666;border-radius: 4px;\
-                                                 background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #E4E4E4, stop:0.5 #D9D9D9, stop:0.501 #D3D3D3) }");
+//    tableView->setStyleSheet("QTableView QHeaderView { color: white;qproperty-highlightSections: false; }\
+//                             QTableView QHeaderView::section {padding: 0 4px; background-color: #999;  border: 1px solid #777;}\
+//                             QTableView QHeaderView::section:horizontal { height:28px;border-left:1px solid #AAA; border-top:none; }\
+//                             QTableView QHeaderView::section:horizontal:last { border-right: none; }\
+//                             QTableView QHeaderView::section:vertical { border-top: 1px solid #AAA; border-left:none; }\
+//                             QTableView QHeaderView::section:vertical:last  { border-bottom: none; }\
+//                             QScrollBar {background-color: #D8D8D8;border:none; } \
+//                             QScrollBar::handle {border: 1px solid #999;border-bottom-color: #666;border-right-color:#666;border-radius: 4px;\
+//                                                 background: url(qrc:/scrollbar_handle.png) center center no-repeat; \
+//                                                 background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #E4E4E4, stop:0.5 #D9D9D9, stop:0.501 #D3D3D3) }");
 
     tableWidget->layout()->addWidget(tableView);
 

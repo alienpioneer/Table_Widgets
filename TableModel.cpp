@@ -11,7 +11,7 @@ TableModel::TableModel(QObject *parent)
       m_defaultBkgColor(QColor(255, 255, 255)),
       m_foregroundColor(QColor(0, 0, 0)),
       m_altColumnColor(QColor(250, 233, 163)),
-      m_headerBkgColor(QColor(152, 152, 152)),
+      m_headerBkgColor(QColor(232, 232, 232)),
       m_firstColumnBkgColor(QColor(237, 237, 237))
 {
 }

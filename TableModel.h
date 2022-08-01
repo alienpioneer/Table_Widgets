@@ -1,3 +1,16 @@
+/*====================================== Solystic =======================================
+|
+| File: TableModel.h
+|
+| Description: Custom model to be used with QTableView :
+|              - create a QTableView and set the model;
+|              - For convenience, use only "user" functions;
+|              - All the table operations are made through the model;
+|              - Call all the functions on the model itself and not on table->model() (returns abstract object)
+|
+| Application : TOP2000 Italy-> 2022
+|
++=======================================================================================*/
 #ifndef TABLEMODEL_H
 #define TABLEMODEL_H
 
@@ -11,17 +24,18 @@ class TableModel : public QAbstractTableModel
 public:
     explicit TableModel(QObject *parent = nullptr);
 
+    // USER FUNCTIONS
+    bool setCellData(int row, int column, const QString data);
+    bool setCellColor(int row, int column, const QColor color);
+    bool clear(); // Clear the whole table
+
     void useAltColumnColor(bool state);     // Use alternating color for the columns
     void useFirstColumnColor(bool state);   // Set a different color for the first columns
     void setAltColumnColor(const QColor color);   // Set alternating color for the columns
     void setFirstColumnColor(const QColor color); // Set a different color for the first column
 
-    bool setCellData(int row, int column, const QString data);
-    bool setCellColor(int row, int column, const QColor color);
-    bool clear();
-
     // Set the list with the header labels
-    // Using this function will automatically set the number of columns
+    // Using this function will automatically set the number of columns accordingly
     bool setHeaderLabels(const QStringList headerLabels, Qt::Orientation orientation);
 
     // QAbstractItemModel interface

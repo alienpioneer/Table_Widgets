@@ -321,15 +321,22 @@ bool TableModel::removeRows(int beginRow, int count, const QModelIndex &parent)
 
     beginRemoveRows(parent, beginRow, beginRow+count-1);
 
-    for (int i = 0; i < count; ++i) {
-        m_data.removeAt(beginRow+i);
+    for (int i = 0; i < count; ++i)
+    {
+        m_data.removeAt(beginRow);
+        m_bkgColors.removeAt(beginRow);
+        m_foregroundColors.removeAt(beginRow);
+        m_verticalHeaderLabels.removeAt(beginRow);
+        emit headerDataChanged(Qt::Vertical, beginRow, beginRow);
+
+        for(int column = 0; column<m_columnCount; column++)
+            emit dataChanged(index(beginRow,column),index(beginRow,column));
     }
 
     m_rowCount -= count;
 
     endRemoveRows();
     return true;
-
 }
 
 // TODO remove colors, headers, etc

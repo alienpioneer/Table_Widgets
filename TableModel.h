@@ -75,9 +75,9 @@ public:
     /*! Replace the vertical header labels from "beginRow" to "count" */
     void replaceVerticalHeaderLabels(const int beginRow,const int count, const QStringList headerLabels);
     //! Remove the "count" number of rows beginning at index "beginRows"
-    //bool removeRows(const int beginRow,const int count);
+    bool removeRows(const int beginRow,const int count);
     //! Remove the "count" number of columns beginning at index "beginColumn"
-    //bool removeColumns(const int beginColumn,const int count);
+    bool removeColumns(const int beginColumn,const int count);
 
     // QAbstractItemModel interface
 protected:

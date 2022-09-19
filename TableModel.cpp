@@ -194,14 +194,22 @@ void TableModel::replaceVerticalHeaderLabels(const int beginRow, const int count
         return;
     }
 
-    int index = 0;
-    for(int i=beginRow; i < beginRow+count; i++)
+    for(int i=0; i<count; i++)
     {
-        m_horizontalHeaderLabels.replace(i, QObject::tr(headerLabels.at(index).toUtf8()));
-        index++;
+        m_horizontalHeaderLabels.replace(beginRow+i, QObject::tr(headerLabels.at(i).toUtf8()));
     }
 
     emit headerDataChanged(Qt::Vertical, beginRow, beginRow+count-1);
+}
+
+bool TableModel::removeRows(const int beginRow, const int count)
+{
+    return removeRows(beginRow, count, QModelIndex());
+}
+
+bool TableModel::removeColumns(const int beginColumn, const int count)
+{
+    return removeColumns(beginColumn, count, QModelIndex());
 }
 
 // --------------------------------------- ROWS COLUMS ---------------------------------------
@@ -302,6 +310,7 @@ bool TableModel::insertColumns(int beginColumn, int count, const QModelIndex &pa
     return true;
 }
 
+// TODO remove colors, headers, etc
 bool TableModel::removeRows(int beginRow, int count, const QModelIndex &parent)
 {
     if( beginRow+count > m_rowCount)
@@ -323,6 +332,7 @@ bool TableModel::removeRows(int beginRow, int count, const QModelIndex &parent)
 
 }
 
+// TODO remove colors, headers, etc
 bool TableModel::removeColumns(int beginColumn, int count, const QModelIndex &parent)
 {
     if( beginColumn+count > m_columnCount)

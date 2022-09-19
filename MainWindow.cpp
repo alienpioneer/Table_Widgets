@@ -94,10 +94,20 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // Insert Columns
-    if(1)
+    if(true)
     {
         model->insertColumns(1,2);
         model->replaceHorizontalHeaderLabels(1,2,{"E","F"});
+    }
+
+    if(false)
+    {
+        model->removeRows(2,3);
+    }
+
+    if(true)
+    {
+        //model->removeColumns(2,3);
     }
 
     // Test  SetItemData

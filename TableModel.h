@@ -74,6 +74,10 @@ public:
     void replaceHorizontalHeaderLabels(const int beginColumn,const int count, const QStringList headerLabels);
     /*! Replace the vertical header labels from "beginRow" to "count" */
     void replaceVerticalHeaderLabels(const int beginRow,const int count, const QStringList headerLabels);
+    //! Remove the "count" number of rows beginning at index "beginRows"
+    //bool removeRows(const int beginRow,const int count);
+    //! Remove the "count" number of columns beginning at index "beginColumn"
+    //bool removeColumns(const int beginColumn,const int count);
 
     // QAbstractItemModel interface
 protected:
@@ -89,7 +93,7 @@ protected:
     bool insertRows(int row, int count, const QModelIndex &parent) override;
     bool insertColumns(int column, int count, const QModelIndex &parent) override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
-    virtual bool removeColumns(int column, int count, const QModelIndex &parent) override;
+    bool removeColumns(int column, int count, const QModelIndex &parent) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     bool hasChildren(const QModelIndex &parent) const override;
 

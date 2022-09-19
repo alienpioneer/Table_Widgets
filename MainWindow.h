@@ -2,8 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-#include "TableModel.h"
 #include <QHeaderView>
 #include <QHBoxLayout>
 #include <QGridLayout>

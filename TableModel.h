@@ -25,21 +25,58 @@ public:
     explicit TableModel(QObject *parent = nullptr);
 
     // USER FUNCTIONS
-    bool setCellData(int row, int column, const QString data);
-    bool setCellColor(int row, int column, const QColor color);
-    bool clear(); // Clear the whole table
+    bool setCellData(const int row,const int column, const QString data);
+    bool setCellColor(const int row,const int column, const QColor color);
 
-    void useAltColumnColor(bool state);     // Use alternating color for the columns
-    void useFirstColumnColor(bool state);   // Set a different color for the first columns
-    void setAltColumnColor(const QColor color);   // Set alternating color for the columns
-    void setFirstColumnColor(const QColor color); // Set a different color for the first column
-
-    // Set the list with the header labels
-    // Using this function will automatically set the number of columns accordingly
+    //! Overloaded function for protected rowCount().
+    int  rowCount();
+    //! Overloaded function for protected columnCount().
+    int  columnCount();
+    //! Inserts "count" rows from a specified row index
+    bool insertRows(int beginRow, int count);
+    //! Inserts "count" columns from a specified column index
+    bool insertColumns(const int beginColumn,const int count);
+    //! Clear all the rows from the table
+    bool clearAllRows();
+    //! Use alternating color for the columns
+    void useAlternateColumnColor(const bool state);
+    //! Use alternating color for the columns
+    void useAlternateRowColor(const bool state);
+    //! Use a different color for the first column
+    void useFirstColumnColor(const bool state);
+    //! Set alternating color for the columns
+    void setAlternateColumnColor(const QColor color);
+    //! Set alternating color for the rows
+    void setAlternateRowColor(const QColor color);
+    //! Set a different color for the first column
+    void setFirstColumnColor(const QColor color);
+    /*! Sets the list with the header labels.
+        Using this function will automatically set the number of rows/columns accordingly.
+        Set the vertical header first !*/
     bool setHeaderLabels(const QStringList headerLabels, Qt::Orientation orientation);
+    /*! Overloaded function for setHeaderLabels().
+        Using this function will automatically set the number of columns accordingly.*/
+    bool setHorizontalHeader(const QStringList headerLabels);
+    /*! Overloaded function for setHeaderLabels().
+        Using this function will automatically set the number of rows accordingly.*/
+    bool setVerticalHeader(const QStringList headerLabels);
+    //! Set horizontal header background color. Not working Win10
+    bool setHorizontalHeaderBkgColor(const QColor color);
+    //! Set vertical header background color
+    bool setVerticalHeaderBkgColor(const QColor color);
+    //! Replace all header labels
+    void resetHeaderLabels(const QStringList headerLabels, Qt::Orientation orientation);
+    //! Replace horizontal header labels.Overloaded function
+    void resetHorizontalHeader(const QStringList headerLabels);
+    //! Replace vertical header labels.Overloaded function
+    void resetVerticalHeader(const QStringList headerLabels);
+    /*! Replace the horizontal header labels from "beginColumn" to "count" */
+    void replaceHorizontalHeaderLabels(const int beginColumn,const int count, const QStringList headerLabels);
+    /*! Replace the vertical header labels from "beginRow" to "count" */
+    void replaceVerticalHeaderLabels(const int beginRow,const int count, const QStringList headerLabels);
 
     // QAbstractItemModel interface
-public:
+protected:
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     // Basic functionality:
@@ -52,35 +89,40 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent) override;
     bool insertColumns(int column, int count, const QModelIndex &parent) override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
+    virtual bool removeColumns(int column, int count, const QModelIndex &parent) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     bool hasChildren(const QModelIndex &parent) const override;
 
 private:
-    void refreshAltColumnColor();
+    void refreshAlternateColumnColor();
+    void refreshAlternateRowColor();
     void refreshFirstColumnColor();
+
+    void debugBkgColors(int row, QString msg);
 
 private:
     int m_rowCount;
     int m_columnCount;
 
     bool m_useColumnAltColor;
+    bool m_useRowAltColor;
     bool m_useFirstColumnColor;
 
-    QStringList             m_headerLabels;
+    QStringList             m_horizontalHeaderLabels;
+    QStringList             m_verticalHeaderLabels;
 
     QColor                  m_defaultBkgColor;
     QColor                  m_foregroundColor;
     QColor                  m_altColumnColor;
-    QColor                  m_headerBkgColor;
+    QColor                  m_altRowColor;
+    QColor                  m_horizontalHeaderBkgColor;
+    QColor                  m_verticalHeaderBkgColor;
+    QColor                  m_headerForegroundColor;
     QColor                  m_firstColumnBkgColor;
 
     QList<QStringList>      m_data;
     QList<QList<QColor>>    m_bkgColors;
     QList<QList<QColor>>    m_foregroundColors;
-
-    // QAbstractItemModel interface
-public:
-
 };
 
 #endif // TABLEMODEL_H

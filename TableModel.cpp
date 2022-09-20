@@ -16,7 +16,7 @@ TableModel::TableModel(QObject *parent)
       m_horizontalHeaderBkgColor(QColor(232, 232, 232)),
       m_verticalHeaderBkgColor(QColor(232, 232, 232)),
       m_headerForegroundColor(QColor(0, 0, 0)),
-      m_firstColumnBkgColor(QColor(237, 237, 237))
+      m_firstColumnBkgColor(QColor(220, 220, 220))
 {
 }
 
@@ -38,6 +38,16 @@ bool TableModel::insertRows(const int beginRow,const int count)
 bool TableModel::insertColumns(const int beginColumn, const int count)
 {
     return insertColumns(beginColumn, count, QModelIndex());
+}
+
+bool TableModel::removeRows(const int beginRow, const int count)
+{
+    return removeRows(beginRow, count, QModelIndex());
+}
+
+bool TableModel::removeColumns(const int beginColumn, const int count)
+{
+    return removeColumns(beginColumn, count, QModelIndex());
 }
 
 bool TableModel::setCellData(const int row, const int column, const QString data)
@@ -202,16 +212,6 @@ void TableModel::replaceVerticalHeaderLabels(const int beginRow, const int count
     emit headerDataChanged(Qt::Vertical, beginRow, beginRow+count-1);
 }
 
-bool TableModel::removeRows(const int beginRow, const int count)
-{
-    return removeRows(beginRow, count, QModelIndex());
-}
-
-bool TableModel::removeColumns(const int beginColumn, const int count)
-{
-    return removeColumns(beginColumn, count, QModelIndex());
-}
-
 // --------------------------------------- ROWS COLUMS ---------------------------------------
 int TableModel::rowCount(const QModelIndex &parent) const
 {
@@ -233,9 +233,7 @@ bool TableModel::insertRows(int beginRow, int count, const QModelIndex &parent)
     QList<QColor> bkgColorList;
     QList<QColor> foregroundColorList;
     QStringList   data;
-    QVector<int>  roles;
-
-    roles.append({Qt::BackgroundRole,Qt::DisplayRole,Qt::ForegroundRole});
+    QVector<int>  roles  ={Qt::BackgroundRole,Qt::DisplayRole,Qt::ForegroundRole};
 
     beginInsertRows(parent, beginRow, beginRow+count-1);
 
@@ -281,9 +279,7 @@ bool TableModel::insertColumns(int beginColumn, int count, const QModelIndex &pa
 
     if (m_columnCount != 0)
     {
-        QVector<int>  roles;
-
-        roles.append({Qt::BackgroundRole,Qt::DisplayRole,Qt::ForegroundRole});
+        QVector<int>  roles  ={Qt::BackgroundRole,Qt::DisplayRole,Qt::ForegroundRole};
 
         for(int row =0; row<m_rowCount; row++)
         {
@@ -313,13 +309,20 @@ bool TableModel::insertColumns(int beginColumn, int count, const QModelIndex &pa
 // TODO remove colors, headers, etc
 bool TableModel::removeRows(int beginRow, int count, const QModelIndex &parent)
 {
-    if( beginRow+count > m_rowCount)
+    if (!m_rowCount)
+    {
+        qWarning() << "TableModel::removeRows() Row count is zero!";
+        return false;
+    }
+    else if( beginRow+count > m_rowCount)
     {
         qWarning() << "TableModel::removeRows() Row count to remove is bigger than the column number!";
         return false;
     }
 
     beginRemoveRows(parent, beginRow, beginRow+count-1);
+
+    QVector<int>  roles  ={Qt::BackgroundRole,Qt::DisplayRole,Qt::ForegroundRole};
 
     for (int i = 0; i < count; ++i)
     {
@@ -330,7 +333,7 @@ bool TableModel::removeRows(int beginRow, int count, const QModelIndex &parent)
         emit headerDataChanged(Qt::Vertical, beginRow, beginRow);
 
         for(int column = 0; column<m_columnCount; column++)
-            emit dataChanged(index(beginRow,column),index(beginRow,column));
+            emit dataChanged(index(beginRow,column), index(beginRow,column), roles);
     }
 
     m_rowCount -= count;
@@ -342,6 +345,17 @@ bool TableModel::removeRows(int beginRow, int count, const QModelIndex &parent)
 // TODO remove colors, headers, etc
 bool TableModel::removeColumns(int beginColumn, int count, const QModelIndex &parent)
 {
+    if (!m_columnCount)
+    {
+        qWarning() << "TableModel::removeColumns() Column count is zero!";
+        return false;
+    }
+    else if( beginColumn+count > m_columnCount)
+    {
+        qWarning() << "TableModel::removeColumns() Ciolumn count to remove is bigger than the column number!";
+        return false;
+    }
+
     if( beginColumn+count > m_columnCount)
     {
         qWarning() << "TableModel::removeColumns() Column count to remove is bigger than the column number!";
@@ -350,8 +364,24 @@ bool TableModel::removeColumns(int beginColumn, int count, const QModelIndex &pa
 
     beginRemoveColumns(parent, beginColumn, beginColumn+count-1);
 
-    for (int i = 0; i < count; ++i) {
-        m_data.removeAt(beginColumn+i);
+    QVector<int>  roles  ={Qt::BackgroundRole,Qt::DisplayRole,Qt::ForegroundRole};
+
+    for(int row =0; row<m_rowCount; row++)
+    {
+        for(int i = 0; i < count; i++)
+        {
+            m_bkgColors[row].removeAt(beginColumn);
+            m_foregroundColors[row].removeAt(beginColumn);
+            m_data[row].removeAt(beginColumn);
+
+            emit dataChanged(index(row, beginColumn), index(row, beginColumn), roles);
+        }
+    }
+
+    for(int i = 0; i < count; i++)
+    {
+        m_horizontalHeaderLabels.removeAt(beginColumn);
+        emit headerDataChanged(Qt::Horizontal, beginColumn, beginColumn);
     }
 
     m_columnCount -= count;
@@ -408,9 +438,6 @@ void TableModel::refreshFirstColumnColor()
     if(!m_rowCount || !m_columnCount)
         return;
 
-    QVector<int> role;
-    role.append(Qt::BackgroundRole);
-
     for(int row =0; row<m_rowCount; row++)
     {
         if (m_useFirstColumnColor)
@@ -423,9 +450,6 @@ void TableModel::refreshAlternateColumnColor()
 
     if(!m_rowCount || !m_columnCount)
         return;
-
-    QVector<int> role;
-    role.append(Qt::BackgroundRole);
 
     for(int row=0; row<m_rowCount; row++)
     {
@@ -441,9 +465,6 @@ void TableModel::refreshAlternateRowColor()
 {
     if(!m_rowCount || !m_columnCount)
         return;
-
-    QVector<int> role;
-    role.append(Qt::BackgroundRole);
 
     for(int row=1; row < m_rowCount; row+=2)
     {

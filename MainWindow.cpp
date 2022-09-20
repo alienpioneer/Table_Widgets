@@ -57,31 +57,31 @@ MainWindow::MainWindow(QWidget *parent)
     model->setHeaderLabels(headers, Qt::Horizontal);
 
     // Test Header Color - Not Working ?
-    if(1)
+    if(false)
     {
          model->setHorizontalHeaderBkgColor(QColor(166,50,60));
     }
 
-    if(0)
+    if(false)
     {
         model->setAlternateColumnColor(QColor(250,232,122));
         model->useAlternateColumnColor(true);
     }
 
-    if(0)
+    if(false)
     {
         model->setAlternateRowColor(QColor(250,120,122));
         model->useAlternateRowColor(true);
     }
 
-    if(0)
+    if(true)
     {
         model->setFirstColumnColor(QColor(250,232,122));
         model->useFirstColumnColor(true);
     }
 
     // Insert Rows
-    if(1)
+    if(true)
     {
         model->insertRows(0,6);
         for( int i =0; i < model->rowCount(); i++ )
@@ -91,23 +91,26 @@ MainWindow::MainWindow(QWidget *parent)
                 model->setCellData(i,j,QString::number(i)+QString::number(j));
             }
         }
+
+        model->setCellColor(0,0,QColor(250,120,30));
     }
 
     // Insert Columns
-    if(false)
+    if(true)
     {
         model->insertColumns(1,2);
         model->replaceHorizontalHeaderLabels(1,2,{"E","F"});
     }
 
-    if(true)
+    if(false)
     {
-        model->removeRows(2,3);
+        model->removeRows(1,3);
     }
 
     if(false)
     {
-        model->removeColumns(2,3);
+        model->removeColumns(1,1);
+        model->removeColumns(3,1);
     }
 
     // Test  SetItemData

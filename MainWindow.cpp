@@ -83,7 +83,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Insert Rows
     if(true)
     {
-        model->insertRows(0,6);
+        model->insertRows(0,10);
+
         for( int i =0; i < model->rowCount(); i++ )
         {
             for( int j =0; j < model->columnCount(); j++ )
@@ -91,8 +92,6 @@ MainWindow::MainWindow(QWidget *parent)
                 model->setCellData(i,j,QString::number(i)+QString::number(j));
             }
         }
-
-        model->setCellColor(0,0,QColor(250,120,30));
     }
 
     // Insert Columns
@@ -100,6 +99,23 @@ MainWindow::MainWindow(QWidget *parent)
     {
         model->insertColumns(1,2);
         model->replaceHorizontalHeaderLabels(1,2,{"E","F"});
+    }
+
+    // Test first column color
+    if(false)
+    {
+        for( int i =0; i < model->rowCount(); i++ )
+        {
+            for( int j =0; j < model->columnCount(); j++ )
+            {
+                if (i == 2 || i == 3)
+                {
+                    model->setCellColor(i,0,QColor(250,120,30));
+                    model->setCellColor(i,2,QColor(250,120,30));
+                    model->setCellColor(i,3,QColor(250,120,30));
+                }
+            }
+        }
     }
 
     if(false)
@@ -204,4 +220,3 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
 }
-
